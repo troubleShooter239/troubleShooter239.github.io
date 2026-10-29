@@ -4,7 +4,7 @@ Static English/Russian portfolio built with Astro, TypeScript and Tailwind CSS, 
 
 ## Requirements
 
-- Node.js 26.13.0 (also declared in `.node-version` and `.nvmrc`).
+- Node.js 26.13.0 (also declared in `.node-version`).
 - pnpm 12.16.1 (`packageManager` in `package.json`).
 
 ## Run locally
