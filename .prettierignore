@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.tools/
+.astro/
+dist/
+work/
+outputs/
+pnpm-lock.yaml
+public/

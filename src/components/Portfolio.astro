@@ -1,0 +1,490 @@
+---
+import '../styles/global.css';
+import { profile } from '../profile';
+import { experience, skills } from '../data';
+import { hackathons, reading, practice, collegeSubjects, collegeTechnologies } from '../learning';
+interface Props {
+  lang: 'en' | 'ru';
+}
+const { lang } = Astro.props;
+const ru = lang === 'ru';
+const t = (en: string, rus: string) => (ru ? rus : en);
+const sections = [
+  ['about', t('About', 'Обо мне')],
+  ['experience', t('Experience', 'Опыт')],
+  ['products', t('Products', 'Продукты')],
+  ['skills', t('Skills', 'Навыки')],
+  ['education', t('Education', 'Образование')],
+  ['contact', t('Contact', 'Контакты')],
+];
+const title = t(
+  'Nikita Morgun — Python Developer | AI/ML Engineer | Back-end Developer',
+  'Никита Моргун — Python-разработчик | AI/ML-инженер | Backend-разработчик',
+);
+const description = t(
+  'AI engineer and Python developer in Tbilisi. LangGraph agents, distributed inference with Ray, and reliable FastAPI backends.',
+  'AI-инженер и Python-разработчик в Тбилиси. Агенты LangGraph, распределённый инференс Ray и надёжный backend на FastAPI.',
+);
+const canonical = new URL(ru ? '/ru/' : '/', Astro.site);
+---
+
+<!doctype html>
+<html lang={lang} data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={new URL('/', Astro.site)} />
+    <link rel="alternate" hreflang="ru" href={new URL('/ru/', Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta property="og:locale" content={ru ? 'ru_RU' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+      } catch {}
+    </script>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Nikita Morgun',
+        url: 'https://troubleshooter239.github.io/',
+        jobTitle: 'Python Developer | AI/ML Engineer | Back-end Developer',
+        sameAs: ['https://github.com/troubleShooter239', 'https://linkedin.com/in/nikitamn'],
+      })}
+    />
+  </head>
+  <body>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <a class="skip" href="#main">
+      {t('Skip to content', 'К содержимому')}
+    </a>
+    <header class="shell flex items-center justify-between gap-4">
+      <a
+        class="logo"
+        href={ru ? '/ru/' : '/'}
+        aria-label={t('Nikita Morgun, home', 'Никита Моргун, главная')}
+      >
+        nm<span>.</span>
+      </a>
+      <nav aria-label={t('Main navigation', 'Основная навигация')} class="desktop-nav flex gap-6">
+        {sections
+          .filter(([id]) => ['about', 'experience', 'products', 'contact'].includes(id))
+          .map(([id, label]) => (
+            <a href={`#${id}`}>{label}</a>
+          ))}
+      </nav>
+      <div class="flex items-center gap-3">
+        <a
+          class="language"
+          href={ru ? '/' : '/ru/'}
+          lang={ru ? 'en' : 'ru'}
+          aria-label={ru ? 'Switch to English' : 'Переключить на русский'}
+        >
+          {ru ? 'EN' : 'RU'} ↗
+        </a>
+        <button
+          id="theme"
+          type="button"
+          aria-label={t('Toggle light theme', 'Переключить светлую тему')}
+          aria-pressed="false"
+        >
+          ◐
+        </button>
+      </div>
+    </header>
+    <main id="main" class="shell">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          {t(
+            'Python developer | AI/ML Engineer | Back-end developer',
+            'Python-разработчик | AI/ML-инженер | Backend-разработчик',
+          )}
+        </div>
+        <p class="location">
+          {t('Based in Tbilisi, Georgia', 'Тбилиси, Грузия')} <span>↗ 41.7° N</span>
+        </p>
+        <h1 id="hero-title">
+          {t('Nikita', 'Никита')}
+          <br />
+          <span>{t('Morgun', 'Моргун')}.</span>
+        </h1>
+        <div class="hero-bottom">
+          <p>
+            {t('LLM agents, distributed inference', 'LLM-агенты, распределённый инференс')}
+            <br />
+            <span>{t('and reliable Python backends.', 'и надёжный backend на Python.')}</span>
+          </p>
+          <div class="actions">
+            <a class="primary" href="#products">
+              {t('Explore my work', 'Посмотреть работы')} ↗
+            </a>
+            <a
+              class="secondary"
+              href={ru ? '/cv/Nikita_Morgun_RU.pdf' : '/cv/Nikita_Morgun_CV.pdf'}
+              target="_blank"
+              rel="noopener"
+            >
+              {t('Read CV', 'Смотреть CV')} ↓
+            </a>
+          </div>
+        </div>
+        <img
+          class="hero-portrait"
+          src="/images/nikita-morgun.webp"
+          alt={t('Portrait of Nikita Morgun', 'Портрет Никиты Моргуна')}
+          width="720"
+          height="960"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </section>
+      <section id="about" class="section two-col">
+        <div>
+          <p class="index">{t('ABOUT', 'ОБО МНЕ')}</p>
+          <h2>
+            {t('From an idea', 'От идеи')}
+            <br />
+            {t('to production.', 'до production.')}
+          </h2>
+        </div>
+        <div class="prose">
+          {profile.about[lang].map((paragraph, index) => (
+            <p class:list={{ lead: index === 0 }}>{paragraph}</p>
+          ))}
+          <div class="tags">
+            {[
+              'Python',
+              'LLM applications',
+              'Distributed systems',
+              'Async',
+              'KISS',
+              'DRY',
+              'Clean Architecture',
+              'Automated Testing',
+            ].map((tag) => (
+              <span>{tag}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section id="experience" class="section">
+        <div class="section-head">
+          <div>
+            <p class="index">{t('EXPERIENCE', 'ОПЫТ')}</p>
+            <h2>{t('Where I’ve built.', 'Где я работал.')}</h2>
+          </div>
+          <p>{t('Backend foundations. AI in production.', 'Backend-основа. AI в production.')}</p>
+        </div>
+        <div class="timeline">
+          {experience.map((job, i) => (
+            <article class="job">
+              <div class="job-meta">
+                <span class="number">0{i + 1}</span>
+                <p>{job.date}</p>
+              </div>
+              <div>
+                <div class="company-heading">
+                  <div
+                    class:list={[
+                      'company-logo',
+                      { 'company-wordmark': job.company === 'Forte Group' },
+                    ]}
+                  >
+                    {job.company === 'Nashy' ? (
+                      <>
+                        <img
+                          class="nashy-dark"
+                          src="/images/products/nashy-dark.png"
+                          alt=""
+                          width="64"
+                          height="64"
+                          loading="lazy"
+                        />
+                        <img
+                          class="nashy-light"
+                          src="/images/products/nashy-light.png"
+                          alt=""
+                          width="64"
+                          height="64"
+                          loading="lazy"
+                        />
+                      </>
+                    ) : (
+                      <img
+                        src={
+                          job.company === 'Prequel Inc.'
+                            ? '/images/products/prequel.png'
+                            : job.company === 'Forte Group'
+                              ? '/images/companies/forte.svg'
+                              : '/images/companies/tapston.png'
+                        }
+                        alt=""
+                        width="100"
+                        height="64"
+                        loading="lazy"
+                      />
+                    )}
+                  </div>
+                  <h3>{job.company}</h3>
+                </div>
+                <p class="role">{job.role}</p>
+                <ul>
+                  {job[lang].map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section
+        id="products"
+        class="section products"
+        aria-labelledby="products-title"
+        aria-roledescription={t('carousel', 'карусель')}
+      >
+        <div class="section-head">
+          <div>
+            <p class="index">{t('PRODUCTS', 'ПРОДУКТЫ')}</p>
+            <h2 id="products-title">
+              {t('Products I’ve worked on.', 'Продукты, над которыми я работал.')}
+            </h2>
+          </div>
+        </div>
+        <div
+          id="products-track"
+          class="products-track"
+          aria-label={t('Products I worked on', 'Продукты, над которыми я работал')}
+        >
+          {profile.products.map((product, i) => (
+            <article
+              class="product-slide"
+              role="group"
+              aria-roledescription={t('slide', 'слайд')}
+              aria-label={`${i + 1} / ${profile.products.length} — ${product.name}`}
+            >
+              <div
+                class:list={[
+                  'product-logo-frame',
+                  { 'silver-logo': product.name === 'Silver Screen' },
+                ]}
+              >
+                {product.name === 'Nashy' ? (
+                  <>
+                    <img
+                      class="nashy-dark"
+                      src="/images/products/nashy-dark.png"
+                      alt=""
+                      width="120"
+                      height="120"
+                      loading="lazy"
+                    />
+                    <img
+                      class="nashy-light"
+                      src="/images/products/nashy-light.png"
+                      alt=""
+                      width="120"
+                      height="120"
+                      loading="lazy"
+                    />
+                  </>
+                ) : (
+                  <img
+                    src={`/images/products/${product.image}`}
+                    alt=""
+                    width="120"
+                    height="120"
+                    loading="lazy"
+                  />
+                )}
+              </div>
+              <h3>{product.name}</h3>
+            </article>
+          ))}
+        </div>
+        <div class="carousel-footer">
+          <p>{t('And many more.', 'И многие другие.')}</p>
+        </div>
+      </section>
+      <section id="skills" class="section">
+        <p class="index">{t('TOOLKIT', 'ИНСТРУМЕНТЫ')}</p>
+        <h2>{t('The tools behind the work.', 'Технологии за результатом.')}</h2>
+        <div class="skill-grid">
+          {skills.map((group, i) => (
+            <article>
+              <span class="number">0{i + 1}</span>
+              <h3>{group[lang]}</h3>
+              <div class="tags">
+                {group.items.map((item) => (
+                  <span>{item}</span>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section id="education" class="section">
+        <div class="section-head">
+          <div>
+            <p class="index">{t('EDUCATION & GROWTH', 'ОБРАЗОВАНИЕ И РАЗВИТИЕ')}</p>
+            <h2>{t('A foundation to build on.', 'Основа для роста.')}</h2>
+          </div>
+        </div>
+        <article class="learning-card education formal-education">
+          <p class="index">{t('FORMAL EDUCATION', 'ОБРАЗОВАНИЕ')}</p>
+          <h3>{profile.education.name[lang]}</h3>
+          <p class="lead">{profile.education.program[lang]}</p>
+          <p>{profile.education.dates}</p>
+          <div class="education-grid formal-curriculum">
+            <div>
+              <h4>{t('Subjects studied', 'Изученные дисциплины')}</h4>
+              <ul class="curriculum-list">
+                {collegeSubjects.map((subject) => (
+                  <li>{subject[lang]}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4>{t('Technologies studied', 'Изученные технологии')}</h4>
+              <div class="tags">
+                {collegeTechnologies.map((technology) => (
+                  <span>{technology}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </article>
+        <div class="education-extra">
+          <article class="learning-card">
+            <p class="index">{t('LANGUAGES', 'ЯЗЫКИ')}</p>
+            <dl class="language-levels">
+              {profile.languages.map((language) => (
+                <div>
+                  <dt>{language[lang]}</dt>
+                  <dd>{language.level[lang]}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        </div>
+        <details class="learning-category learning-disclosure">
+          <summary>
+            {t('Beyond the curriculum', 'Развитие вне учебной программы')}
+            <span class="disclosure-icon" aria-hidden="true">
+              +
+            </span>
+          </summary>
+          <div class="learning-content">
+            {[
+              {
+                title: t('Hackathons & challenges', 'Хакатоны и соревнования'),
+                entries: hackathons,
+              },
+              { title: t('Books I’ve read', 'Прочитанные книги'), entries: reading },
+              { title: t('Algorithm practice', 'Алгоритмическая практика'), entries: practice },
+            ]
+              .filter((group) => group.entries.length > 0)
+              .map((group) => (
+                <section class="learning-group">
+                  <h3>{group.title}</h3>
+                  <div class="education-grid">
+                    {group.entries.map((entry) => (
+                      <article class="learning-card">
+                        <h4>
+                          {entry.url ? (
+                            <a href={entry.url}>
+                              {ru ? (entry.titleRu ?? entry.title) : entry.title} ↗
+                            </a>
+                          ) : ru ? (
+                            (entry.titleRu ?? entry.title)
+                          ) : (
+                            entry.title
+                          )}
+                        </h4>
+                        <p>{ru ? entry.detailRu : entry.detailEn}</p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+          </div>
+        </details>
+      </section>
+      <section id="contact" class="section contact">
+        <p class="index">{t('CONTACT', 'КОНТАКТЫ')}</p>
+        <h2>
+          {t('Let’s build', 'Давайте создадим')}
+          <br />
+          <span>{t('something useful.', 'что-то полезное.')}</span>
+        </h2>
+        <a class="email" href={`mailto:${profile.email}`}>
+          morgun.nikita@outlook.com ↗
+        </a>
+        <div class="contact-links">
+          <a class="social-icon" href={profile.github} aria-label="GitHub" title="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.73 1.16 1.73 1.16 1 1.72 2.64 1.22 3.28.94.1-.73.39-1.22.71-1.5-2.5-.28-5.13-1.25-5.13-5.56 0-1.23.44-2.23 1.16-3.02-.12-.29-.5-1.43.11-2.98 0 0 .95-.3 3.1 1.15a10.8 10.8 0 0 1 5.62 0c2.15-1.45 3.09-1.15 3.09-1.15.62 1.55.23 2.69.12 2.98.72.79 1.15 1.79 1.15 3.02 0 4.32-2.63 5.28-5.14 5.56.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"
+              />
+            </svg>
+          </a>
+          <a class="social-icon" href={profile.linkedin} aria-label="LinkedIn" title="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.31h.04c.39-.74 1.36-1.52 2.8-1.52 3 0 3.57 1.97 3.57 4.53v5.23Z"
+              />
+            </svg>
+          </a>
+          <a class="social-icon" href={profile.telegram} aria-label="Telegram" title="Telegram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                fill="currentColor"
+                d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.91 6.86-1.64 7.73c-.12.55-.45.68-.91.42l-2.5-1.84-1.2 1.16c-.13.13-.24.24-.49.24l.18-2.54 4.62-4.17c.2-.18-.04-.28-.31-.1l-5.71 3.6-2.46-.77c-.54-.17-.55-.54.11-.8l9.62-3.7c.45-.17.84.1.69.77Z"
+              />
+            </svg>
+          </a>
+          <a href="/cv/Nikita_Morgun_CV.pdf" download>
+            CV · EN ↓
+          </a>
+          <a href="/cv/Nikita_Morgun_RU.pdf" download>
+            CV · RU ↓
+          </a>
+        </div>
+      </section>
+    </main>
+    <footer class="shell flex justify-between gap-4">
+      <span>
+        © {new Date().getFullYear()} {t('Nikita Morgun', 'Никита Моргун')}
+      </span>
+    </footer>
+    <button
+      class="back-top"
+      id="back-top"
+      type="button"
+      aria-label={t('Scroll to the top of the page', 'Подняться в начало страницы')}
+      hidden
+    >
+      ↑
+    </button>
+    <script>
+      import '../scripts/interactions';
+    </script>
+  </body>
+</html>
