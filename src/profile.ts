@@ -78,30 +78,37 @@ export const profile = {
   products: [
     {
       name: 'Prequel',
+      url: 'https://prequel.app/',
       image: 'prequel.png',
     },
     {
       name: 'GIO',
+      url: 'https://gioapp.ai/',
       image: 'gio.png',
     },
     {
       name: 'Esti',
+      url: 'https://esti.app/',
       image: 'esti.png',
     },
     {
       name: 'Hula',
+      url: 'https://hulaapp.ai/',
       image: 'hula.png',
     },
     {
       name: 'Nashy',
+      url: 'https://nashy.app/',
       image: 'nashy-dark.png',
     },
     {
       name: 'Silver Screen',
+      url: 'https://mooon.by/',
       image: 'silver-screen-official.png',
     },
     {
       name: 'Burger King',
+      url: 'https://burger-king.by/',
       image: 'burger-king.svg',
     },
   ],

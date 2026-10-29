@@ -60,9 +60,9 @@ const canonical = new URL(ru ? '/ru/' : '/', Astro.site);
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: 'Nikita Morgun',
-        url: 'https://troubleshooter239.github.io/',
+        url: Astro.site,
         jobTitle: 'Python Developer | AI/ML Engineer | Back-end Developer',
-        sameAs: ['https://github.com/troubleShooter239', 'https://linkedin.com/in/nikitamn'],
+        sameAs: [profile.github, profile.linkedin],
       })}
     />
   </head>
@@ -272,9 +272,11 @@ const canonical = new URL(ru ? '/ru/' : '/', Astro.site);
           aria-label={t('Products I worked on', 'Продукты, над которыми я работал')}
         >
           {profile.products.map((product, i) => (
-            <article
+            <a
               class="product-slide"
-              role="group"
+              href={product.url}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-roledescription={t('slide', 'слайд')}
               aria-label={`${i + 1} / ${profile.products.length} — ${product.name}`}
             >
@@ -314,7 +316,7 @@ const canonical = new URL(ru ? '/ru/' : '/', Astro.site);
                 )}
               </div>
               <h3>{product.name}</h3>
-            </article>
+            </a>
           ))}
         </div>
         <div class="carousel-footer">
@@ -433,7 +435,7 @@ const canonical = new URL(ru ? '/ru/' : '/', Astro.site);
           <span>{t('something useful.', 'что-то полезное.')}</span>
         </h2>
         <a class="email" href={`mailto:${profile.email}`}>
-          morgun.nikita@outlook.com ↗
+          {profile.email} ↗
         </a>
         <div class="contact-links">
           <a class="social-icon" href={profile.github} aria-label="GitHub" title="GitHub">

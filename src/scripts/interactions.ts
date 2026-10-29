@@ -9,6 +9,7 @@ const updateBackTop = () => {
     progress.style.transform = `scaleX(${distance > 0 ? Math.min(1, window.scrollY / distance) : 0})`;
 };
 window.addEventListener('scroll', updateBackTop, { passive: true });
+window.addEventListener('resize', updateBackTop);
 updateBackTop();
 backTop?.addEventListener('click', () =>
   window.scrollTo({
@@ -85,7 +86,7 @@ document
   )
   .forEach((element, index) => entrance(element, index * 65));
 const track = document.querySelector<HTMLDivElement>('#products-track');
-if (track) {
+if (track && track.children.length > 1) {
   const slides = Array.from(track.querySelectorAll<HTMLElement>('.product-slide'));
   let cycle = 0,
     frame = 0,
@@ -95,15 +96,14 @@ if (track) {
     slides.map((slide) => {
       const clone = slide.cloneNode(true) as HTMLElement;
       clone.setAttribute('aria-hidden', 'true');
-      clone.inert = true;
+      // Keep visible copies clickable without duplicating keyboard navigation.
+      clone.tabIndex = -1;
       clone.dataset.clone = 'true';
       return clone;
     });
   track.prepend(...copy());
   track.append(...copy());
   track.classList.add('is-looping');
-  const step = () =>
-    slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : track.clientWidth;
   const normalize = () => {
     if (cycle <= 0) return;
     if (track.scrollLeft >= cycle * 2) track.scrollLeft -= cycle;
@@ -122,12 +122,21 @@ if (track) {
     lastTime = time;
     frame = requestAnimationFrame(tick);
   };
-  new ResizeObserver(() => {
-    cycle = Math.round(slides.length * step());
-    track.scrollLeft = cycle;
-  }).observe(track);
-  cycle = Math.round(slides.length * step());
-  track.scrollLeft = cycle;
+  const measure = () => {
+    const previousCycle = cycle;
+    // Measure equivalent slides so fractional card widths don't accumulate drift.
+    cycle = slides[0].offsetLeft - (track.firstElementChild as HTMLElement).offsetLeft;
+    track.scrollLeft = previousCycle > 0 ? (track.scrollLeft / previousCycle) * cycle : cycle;
+    normalize();
+  };
+  new ResizeObserver(measure).observe(track);
+  measure();
+  track.addEventListener('scroll', normalize, { passive: true });
+  window.addEventListener('pagehide', () => cancelAnimationFrame(frame));
+  window.addEventListener('pageshow', () => {
+    cancelAnimationFrame(frame);
+    lastTime = 0;
+    frame = requestAnimationFrame(tick);
+  });
   frame = requestAnimationFrame(tick);
-  window.addEventListener('pagehide', () => cancelAnimationFrame(frame), { once: true });
 }

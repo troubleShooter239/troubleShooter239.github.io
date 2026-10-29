@@ -105,8 +105,7 @@ nav a {
 .eyebrow,
 .index,
 .number,
-.location,
-.stack {
+.location {
   font-family: Consolas, 'Courier New', monospace;
 }
 .eyebrow {
@@ -315,7 +314,8 @@ li {
 }
 .contact-links {
   display: flex;
-  gap: 27px;
+  gap: 16px;
+  align-items: center;
   flex-wrap: wrap;
   font-size: 13px;
   color: var(--muted);
@@ -422,9 +422,6 @@ footer {
   .skill-grid h3 {
     margin-top: 14px;
   }
-  .contact-links {
-    gap: 22px;
-  }
   .prose .lead,
   .education .lead {
     font-size: 21px;
@@ -480,8 +477,8 @@ footer {
 .products-track {
   display: flex;
   gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  overflow-x: hidden;
+  touch-action: pan-y;
   overscroll-behavior-x: contain;
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
@@ -489,39 +486,40 @@ footer {
   position: relative;
 }
 .product-slide {
-  flex: 0 0 calc((100% - 40px) / 3);
+  flex: 0 0 calc((100% - 60px) / 4);
   scroll-snap-align: start;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 36px 24px 24px;
+  padding: 22px 18px 18px;
   min-width: 0;
 }
 .product-logo-frame {
-  height: 154px;
+  height: 104px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 .product-logo-frame img {
-  width: 120px;
-  height: 120px;
+  width: 84px;
+  height: 84px;
   object-fit: contain;
-  border-radius: 22px;
+  border-radius: 16px;
 }
 .product-logo-frame.silver-logo {
   background: #fff;
   border-radius: 10px;
 }
 .product-logo-frame.silver-logo img {
-  width: 150px;
+  width: 120px;
   height: auto;
   border-radius: 0;
 }
 .product-slide h3 {
-  font-size: 27px;
-  margin-bottom: 12px;
+  font-size: 22px;
+  margin-bottom: 0;
+  text-align: center;
 }
 .nashy-light {
   display: none;
@@ -548,7 +546,7 @@ footer {
 }
 @media (max-width: 900px) {
   .product-slide {
-    flex-basis: calc((100% - 20px) / 2);
+    flex-basis: calc((100% - 40px) / 3);
   }
 }
 @media (max-width: 600px) {
@@ -561,11 +559,8 @@ footer {
     font-size: 30px;
   }
   .product-slide {
-    flex-basis: 86%;
-    padding: 26px 20px 22px;
-  }
-  .carousel-footer > span:last-child {
-    display: none;
+    flex-basis: 64%;
+    padding: 20px 16px 16px;
   }
 }
 .education-grid {
@@ -662,10 +657,6 @@ footer {
     font-size: 23px;
   }
 }
-.products-track.is-looping {
-  overflow-x: hidden;
-  touch-action: pan-y;
-}
 .back-top {
   position: fixed;
   right: 24px;
@@ -694,26 +685,6 @@ footer {
     width: 46px;
     height: 46px;
   }
-}
-.product-slide {
-  flex-basis: calc((100% - 60px) / 4);
-  padding: 22px 18px 18px;
-}
-.product-logo-frame {
-  height: 104px;
-  margin-bottom: 18px;
-}
-.product-logo-frame img {
-  width: 84px;
-  height: 84px;
-  border-radius: 16px;
-}
-.product-logo-frame.silver-logo img {
-  width: 120px;
-}
-.product-slide h3 {
-  font-size: 22px;
-  margin-bottom: 8px;
 }
 .formal-curriculum {
   border-top: 1px solid var(--line);
@@ -782,16 +753,7 @@ footer {
   transform: rotate(45deg);
 }
 
-@media (max-width: 900px) {
-  .product-slide {
-    flex-basis: calc((100% - 40px) / 3);
-  }
-}
 @media (max-width: 600px) {
-  .product-slide {
-    flex-basis: 64%;
-    padding: 20px 16px 16px;
-  }
   .product-logo-frame {
     height: 94px;
   }
@@ -802,14 +764,6 @@ footer {
     font-size: 20px;
     padding: 20px;
   }
-}
-.product-slide h3 {
-  text-align: center;
-  margin-bottom: 0;
-}
-.contact-links {
-  align-items: center;
-  gap: 16px;
 }
 .social-icon {
   display: inline-flex;
@@ -1058,4 +1012,8 @@ a {
   .product-slide:hover .product-logo-frame img {
     transform: none;
   }
+}
+
+.product-slide:focus-visible {
+  outline-offset: -3px;
 }
